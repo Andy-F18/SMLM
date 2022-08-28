@@ -8,7 +8,9 @@ class SMLM:
     def __init__(self):
         config = yaml.safe_load(open("config/config.yml"))
         self.__color = config["colors"]
-        self.__font = ('Calibri', 16)
+        self.__fonts = {}
+        for font in config['fonts']:
+            self.__fonts[font] = (config['fonts'][font]['police'], config['fonts'][font]['size'])
 
         self.__root = tk.Tk()
 
@@ -23,7 +25,7 @@ class SMLM:
 
         self.hide = False
         self.__menu()
-        self.lShow = tk.Label(self.__root, text=">>", background=self.__color['bg1'], font=self.__font)
+        self.lShow = tk.Label(self.__root, text=">>", background=self.__color['bg1'], font=self.__fonts['cal16'])
         self.lShow.bind('<Button-1>', lambda event: self.hideShowMenu())
 
         self.__root.mainloop()
@@ -48,31 +50,31 @@ class SMLM:
         can.create_image(0, 0, anchor=tk.NW, image=can.picture)
         can.grid(column=0, row=0)
 
-        l = tk.Label(self.fMenu, text="Acceuil", background=self.__color['them2'], font=self.__font)
+        l = tk.Label(self.fMenu, text="Acceuil", background=self.__color['them2'], font=self.__fonts['cal16'])
         l.bind("<Button-1>", lambda event: self.__test("Acceuil"))
         l.grid(column=0, row=1, sticky=tk.W, padx=10)
 
-        l = tk.Label(self.fMenu, text="pri---gne???", background=self.__color['them2'], font=self.__font)
+        l = tk.Label(self.fMenu, text="pri---gne???", background=self.__color['them2'], font=self.__fonts['cal16'])
         l.bind("<Button-1>", lambda event: self.__test("pri---gne???"))
         l.grid(column=0, row=2, sticky=tk.W, padx=10)
 
-        l = tk.Label(self.fMenu, text="L'ile?", background=self.__color['them2'], font=self.__font)
+        l = tk.Label(self.fMenu, text="L'ile?", background=self.__color['them2'], font=self.__fonts['cal16'])
         l.bind("<Button-1>", lambda event: self.__test("L'ile?"))
         l.grid(column=0, row=3, sticky=tk.W, padx=10)
 
-        l = tk.Label(self.fMenu, text="Galerie", background=self.__color['them2'], font=self.__font)
+        l = tk.Label(self.fMenu, text="Galerie", background=self.__color['them2'], font=self.__fonts['cal16'])
         l.bind("<Button-1>", lambda event: self.__test("Galerie"))
         l.grid(column=0, row=4, sticky=tk.W, padx=10)
 
-        l = tk.Label(self.fMenu, text="Aide", background=self.__color['them2'], font=self.__font)
+        l = tk.Label(self.fMenu, text="Aide", background=self.__color['them2'], font=self.__fonts['cal16'])
         l.bind("<Button-1>", lambda event: self.__test("Aide"))
         l.grid(column=0, row=5, sticky=tk.W, padx=10)
 
-        l = tk.Label(self.fMenu, text="Favoris", background=self.__color['them2'], font=self.__font)
+        l = tk.Label(self.fMenu, text="Favoris", background=self.__color['them2'], font=self.__fonts['cal16'])
         l.bind("<Button-1>", lambda event: self.__test("Favoris"))
         l.grid(column=0, row=6, sticky=tk.W, padx=10)
 
-        self.lHideShowMenu = tk.Label(self.fMenu, text="<<", background=self.__color['them2'], font=self.__font)
+        self.lHideShowMenu = tk.Label(self.fMenu, text="<<", background=self.__color['them2'], font=self.__fonts['cal16'])
         self.lHideShowMenu.bind("<Button-1>", lambda event: self.hideShowMenu())
         self.lHideShowMenu.grid(column=0, row=7, sticky=tk.E, padx=10)
 
