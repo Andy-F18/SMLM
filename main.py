@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+import numpy as np
 from PIL import Image, ImageTk
 import yaml
+import time
 
 
 class SMLM:
@@ -13,6 +15,8 @@ class SMLM:
             self.__fonts[font] = (config['fonts'][font]['police'], config['fonts'][font]['size'])
 
         self.__root = tk.Tk()
+        self.__root.title("SMLM")
+        self.__root.iconbitmap(r"config/gia.ico")
 
         self.__size = {'h': int(self.__root.winfo_screenheight()/2-50), 'w': int(self.__root.winfo_screenwidth()/2)}
         self.__root.state('zoomed')
@@ -78,18 +82,36 @@ class SMLM:
         self.lHideShowMenu.bind("<Button-1>", lambda event: self.hideShowMenu())
         self.lHideShowMenu.grid(column=0, row=7, sticky=tk.E, padx=10)
 
-        self.fMenu.grid(column=0, row=0, sticky=tk.NSEW)
+        self.fMenu.place(width=250, height=self.__root.winfo_screenheight()-50)
 
     def hideShowMenu(self):
+        v = 0.1
         if self.hide:
-            self.fMenu.grid(column=0, row=0, sticky=tk.NSEW)
-            self.lShow.place_forget()
             self.hide = False
+            self.lShow.place_forget()
+            x = 0
+            n = -250
+            while n < 0:
+                n = -int(250 * np.exp(-x))
+                x += v
+                # print(n)
+                time.sleep(0.01)
+                self.fMenu.place(anchor=tk.NW, width=250, height=self.__root.winfo_screenheight() - 50, x=n)
+                self.__root.update()
 
         else:
-            self.fMenu.grid_forget()
-            self.lShow.place(anchor=tk.SW, x=0, y=self.__size['h']*2)
             self.hide = True
+            x = 0
+            n = 0
+            while n > -250:
+                n = int(250 * np.exp(-x))-250
+                x += v
+                # print(n)
+                time.sleep(0.01)
+                self.fMenu.place(anchor=tk.NW, width=250, height=self.__root.winfo_screenheight()-50, x=n)
+                self.__root.update()
+            # self.fMenu.grid_forget()
+            self.lShow.place(anchor=tk.SW, x=0, y=self.__size['h']*2)
 
     @staticmethod
     def __test(txt):
