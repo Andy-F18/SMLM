@@ -4,15 +4,4 @@ colors:
   them1: '#4bc032'
   them2: '#ecdf63'
 
-fonts:
-  cal12:
-    police: Calibri
-    size: 12
-
-  cal16:
-    police: Calibri
-    size: 16
-
-  cal20:
-    police: Calibri
-    size: 20
+font: 'Calibri'
