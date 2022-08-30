@@ -3,7 +3,6 @@ import tkinter as tk
 import numpy as np
 from PIL import Image, ImageTk
 import yaml
-import time
 
 
 class SMLM:
@@ -30,8 +29,11 @@ class SMLM:
 
         self.__hide = False
         self.__menu()
+        self.__v = 0.15
+        self.__x = 0
+        self.__posMenu = 0
         self.__lShow = tk.Label(self.__root, text=">>", background=self.__color['bg1'], font=self.__fonts['cal16'])
-        self.__lShow.bind('<Button-1>', lambda event: self.__hideShowMenu())
+        self.__lShow.bind('<Button-1>', lambda event: self.__showMenu())
         self.__lShow.bind('<Enter>', lambda event, lab=self.__lShow: self.__hoverMenuE(lab))
         self.__lShow.bind('<Leave>', lambda event, lab=self.__lShow: self.__hoverMenuL(lab))
 
@@ -119,40 +121,38 @@ class SMLM:
 
         self.__lHideShowMenu = tk.Label(self.__fMenu, text="<<", background=self.__color['them2'],
                                         font=self.__fonts['cal16'])
-        self.__lHideShowMenu.bind("<Button-1>", lambda event: self.__hideShowMenu())
+        self.__lHideShowMenu.bind("<Button-1>", lambda event: self.__hideMenu())
         self.__lHideShowMenu.bind('<Enter>', lambda event, lab=self.__lHideShowMenu: self.__hoverMenuE(lab))
         self.__lHideShowMenu.bind('<Leave>', lambda event, lab=self.__lHideShowMenu: self.__hoverMenuL(lab))
         self.__lHideShowMenu.grid(column=0, row=9, sticky=tk.E, padx=10)
 
         self.__fMenu.place(width=250, height=self.__size['h'])
 
-    def __hideShowMenu(self):
-        v = 0.15
-        if self.__hide:
-            self.__hide = False
+    def __showMenu(self):
+        # self.__hide = False
+        if self.__posMenu == -250:
             self.__lShow.place_forget()
-            x = 0
-            n = -250
-            while n < 0:
-                n = -int(250 * np.exp(-x))
-                x += v
-                # print(n)
-                time.sleep(0.01)
-                self.__fMenu.place(anchor=tk.NW, width=250, height=self.__size['h'], x=n)
-                self.__fMenu.update()
-
+        if self.__posMenu < 0:
+            self.__posMenu = -int(250 * np.exp(-self.__x))
+            self.__x += self.__v
+            # print(n)
+            self.__fMenu.place(anchor=tk.NW, width=250, height=self.__size['h'], x=self.__posMenu)
+            self.__root.after(10, self.__showMenu)
         else:
-            self.__hide = True
-            x = 0
-            n = 0
-            while n > -250:
-                n = int(250 * np.exp(-x))-250
-                x += v
-                # print(n)
-                time.sleep(0.01)
-                self.__fMenu.place(anchor=tk.NW, width=250, height=self.__size['h'], x=n)
-                self.__fMenu.update()
-            # self.fMenu.grid_forget()
+            self.__x = 0
+
+    def __hideMenu(self):
+        # self.__hide = False
+        if self.__posMenu == -250:
+            self.__lShow.place_forget()
+        if self.__posMenu > -250:
+            self.__posMenu = int(250 * np.exp(-self.__x))-250
+            self.__x += self.__v
+            # print(self.__posMenu)
+            self.__fMenu.place(anchor=tk.NW, width=250, height=self.__size['h'], x=self.__posMenu)
+            self.__root.after(10, self.__hideMenu)
+        else:
+            self.__x = 0
             self.__lShow.place(anchor=tk.SW, x=10, y=self.__size['h']-20)
 
     def __hoverMenuE(self, widget):
