@@ -1,5 +1,5 @@
 import tkinter as tk
-# from tkinter import ttk
+# from tkinter import font
 import numpy as np
 from PIL import Image, ImageTk
 import yaml
@@ -26,7 +26,6 @@ class SMLM:
         self.__root.config(background=self.__color['bg1'])
 
         self.__root.grid_columnconfigure(0, weight=1)
-        self.__root.grid_columnconfigure(1, weight=20)
         self.__root.grid_rowconfigure(0, weight=1)
 
         self.__hide = False
@@ -35,6 +34,10 @@ class SMLM:
         self.__lShow.bind('<Button-1>', lambda event: self.__hideShowMenu())
         self.__lShow.bind('<Enter>', lambda event, lab=self.__lShow: self.__hoverMenuE(lab))
         self.__lShow.bind('<Leave>', lambda event, lab=self.__lShow: self.__hoverMenuL(lab))
+
+        self.__fMain = tk.Frame(self.__root, background=self.__color['bg1'])
+        self.__fMain.grid(column=0, row=0)
+        self.__acceuil()
 
         self.__root.mainloop()
 
@@ -48,6 +51,8 @@ class SMLM:
         self.__fMenu.grid_rowconfigure(5, weight=1)
         self.__fMenu.grid_rowconfigure(6, weight=1)
         self.__fMenu.grid_rowconfigure(7, weight=1)
+        self.__fMenu.grid_rowconfigure(8, weight=1)
+        self.__fMenu.grid_rowconfigure(9, weight=1)
         self.__fMenu.grid_columnconfigure(0, weight=1)
 
         img = Image.open("config/gia3.png")
@@ -65,47 +70,59 @@ class SMLM:
         can.grid(column=0, row=0)
 
         l = tk.Label(self.__fMenu, text="Acceuil", background=self.__color['them2'], font=self.__fonts['cal16'])
-        l.bind("<Button-1>", lambda event: self.__test("Acceuil"))
+        l.bind("<Button-1>", lambda event: self.__acceuil())
         l.bind('<Enter>', lambda event, lab=l: self.__hoverMenuE(lab))
         l.bind('<Leave>', lambda event, lab=l: self.__hoverMenuL(lab))
         l.grid(column=0, row=1, sticky=tk.NSEW, padx=10)
 
         l = tk.Label(self.__fMenu, text="Personnages", background=self.__color['them2'], font=self.__fonts['cal16'])
-        l.bind("<Button-1>", lambda event: self.__test("Personnages"))
+        l.bind("<Button-1>", lambda event: self.__personnages())
         l.bind('<Enter>', lambda event, lab=l: self.__hoverMenuE(lab))
         l.bind('<Leave>', lambda event, lab=l: self.__hoverMenuL(lab))
         l.grid(column=0, row=2, sticky=tk.NSEW, padx=10)
 
         l = tk.Label(self.__fMenu, text="L'ile?", background=self.__color['them2'], font=self.__fonts['cal16'])
-        l.bind("<Button-1>", lambda event: self.__test("L'ile?"))
+        l.bind("<Button-1>", lambda event: self.__lIle())
         l.bind('<Enter>', lambda event, lab=l: self.__hoverMenuE(lab))
         l.bind('<Leave>', lambda event, lab=l: self.__hoverMenuL(lab))
         l.grid(column=0, row=3, sticky=tk.NSEW, padx=10)
 
         l = tk.Label(self.__fMenu, text="Galerie", background=self.__color['them2'], font=self.__fonts['cal16'])
-        l.bind("<Button-1>", lambda event: self.__test("Galerie"))
+        l.bind("<Button-1>", lambda event: self.__galerie())
         l.bind('<Enter>', lambda event, lab=l: self.__hoverMenuE(lab))
         l.bind('<Leave>', lambda event, lab=l: self.__hoverMenuL(lab))
         l.grid(column=0, row=4, sticky=tk.NSEW, padx=10)
 
         l = tk.Label(self.__fMenu, text="Aide", background=self.__color['them2'], font=self.__fonts['cal16'])
-        l.bind("<Button-1>", lambda event: self.__test("Aide"))
+        l.bind("<Button-1>", lambda event: self.__aide())
         l.bind('<Enter>', lambda event, lab=l: self.__hoverMenuE(lab))
         l.bind('<Leave>', lambda event, lab=l: self.__hoverMenuL(lab))
         l.grid(column=0, row=5, sticky=tk.NSEW, padx=10)
 
         l = tk.Label(self.__fMenu, text="Favoris", background=self.__color['them2'], font=self.__fonts['cal16'])
-        l.bind("<Button-1>", lambda event: self.__test("Favoris"))
+        l.bind("<Button-1>", lambda event: self.__favoris())
         l.bind('<Enter>', lambda event, lab=l: self.__hoverMenuE(lab))
         l.bind('<Leave>', lambda event, lab=l: self.__hoverMenuL(lab))
         l.grid(column=0, row=6, sticky=tk.NSEW, padx=10)
+
+        l = tk.Label(self.__fMenu, text="Options", background=self.__color['them2'], font=self.__fonts['cal16'])
+        l.bind("<Button-1>", lambda event: self.__options())
+        l.bind('<Enter>', lambda event, lab=l: self.__hoverMenuE(lab))
+        l.bind('<Leave>', lambda event, lab=l: self.__hoverMenuL(lab))
+        l.grid(column=0, row=7, sticky=tk.NSEW, padx=10)
+
+        l = tk.Label(self.__fMenu, text="Quitter", background=self.__color['them2'], font=self.__fonts['cal16'])
+        l.bind("<Button-1>", lambda event: self.__root.quit())
+        l.bind('<Enter>', lambda event, lab=l: self.__hoverMenuE(lab))
+        l.bind('<Leave>', lambda event, lab=l: self.__hoverMenuL(lab))
+        l.grid(column=0, row=8, sticky=tk.NSEW, padx=10)
 
         self.__lHideShowMenu = tk.Label(self.__fMenu, text="<<", background=self.__color['them2'],
                                         font=self.__fonts['cal16'])
         self.__lHideShowMenu.bind("<Button-1>", lambda event: self.__hideShowMenu())
         self.__lHideShowMenu.bind('<Enter>', lambda event, lab=self.__lHideShowMenu: self.__hoverMenuE(lab))
         self.__lHideShowMenu.bind('<Leave>', lambda event, lab=self.__lHideShowMenu: self.__hoverMenuL(lab))
-        self.__lHideShowMenu.grid(column=0, row=7, sticky=tk.E, padx=10)
+        self.__lHideShowMenu.grid(column=0, row=9, sticky=tk.E, padx=10)
 
         self.__fMenu.place(width=250, height=self.__size['h'])
 
@@ -144,9 +161,53 @@ class SMLM:
     def __hoverMenuL(self, widget):
         widget.config(font=self.__fonts['cal16'])
 
-    @staticmethod
-    def __test(txt):
-        print(txt)
+    def __acceuil(self):
+        for widget in self.__fMain.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.__fMain, text="Acceuil", background=self.__color['bg1']).grid(column=0, row=0)
+
+    def __personnages(self):
+        for widget in self.__fMain.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.__fMain, text="Personnages", background=self.__color['bg1']).grid(column=0, row=0)
+
+    def __lIle(self):
+        for widget in self.__fMain.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.__fMain, text="L'ile", background=self.__color['bg1']).grid(column=0, row=0)
+
+    def __galerie(self):
+        for widget in self.__fMain.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.__fMain, text="Galerie", background=self.__color['bg1']).grid(column=0, row=0)
+
+    def __aide(self):
+        for widget in self.__fMain.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.__fMain, text="Aide", background=self.__color['bg1']).grid(column=0, row=0)
+
+    def __favoris(self):
+        for widget in self.__fMain.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.__fMain, text="Favoris", background=self.__color['bg1']).grid(column=0, row=0)
+
+    def __options(self):
+        for widget in self.__fMain.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.__fMain, text="Options", background=self.__color['bg1']).grid(column=0, row=0)
+
+    def __test(self, txt):
+        for widget in self.__fMain.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.__fMain, text=txt, background=self.__color['bg1']).grid(column=0, row=0)
 
 
 if __name__ == '__main__':
