@@ -1,8 +1,12 @@
 import tkinter as tk
 from tkinter import font, ttk
 import numpy as np
+import requests
 from PIL import Image, ImageTk
 import yaml
+import requests as rqst
+
+from pages.PagePerso import PagePerso
 
 
 class SMLM:
@@ -28,13 +32,15 @@ class SMLM:
         self.__root.grid_columnconfigure(0, weight=1)
         self.__root.grid_rowconfigure(0, weight=1)
 
+        self.__fMain = tk.Frame(self.__root, background=self.__color['bg1'])
+        self.__fMain.grid(column=0, row=0, sticky=tk.NSEW)
+        self.__fMain.grid_rowconfigure(1, weight=1)
+        self.__fMain.grid_columnconfigure(0, weight=1)
+
         self.__menu()
         self.__v = 0.1
         self.__x = 0
         self.__posMenu = 0
-
-        self.__fMain = tk.Frame(self.__root, background=self.__color['bg1'])
-        self.__fMain.grid(column=0, row=0)
         self.__acceuil()
 
         self.__root.mainloop()
@@ -165,43 +171,49 @@ class SMLM:
         widget.config(font=self.font(16))
 
     def __acceuil(self):
+        self.__hideMenu()
         for widget in self.__fMain.winfo_children():
             widget.destroy()
 
         tk.Label(self.__fMain, text="Acceuil", background=self.__color['bg1'], font=self.font(16)).grid(column=0, row=0)
 
     def __personnages(self):
+        self.__hideMenu()
         for widget in self.__fMain.winfo_children():
             widget.destroy()
 
-        tk.Label(self.__fMain, text="Personnages", background=self.__color['bg1'], font=self.font(16)).grid(column=0,
-                                                                                                            row=0)
+        PagePerso(self, self.__fMain)
 
     def __lIle(self):
+        self.__hideMenu()
         for widget in self.__fMain.winfo_children():
             widget.destroy()
 
         tk.Label(self.__fMain, text="L'ile", background=self.__color['bg1'], font=self.font(16)).grid(column=0, row=0)
 
     def __galerie(self):
+        self.__hideMenu()
         for widget in self.__fMain.winfo_children():
             widget.destroy()
 
         tk.Label(self.__fMain, text="Galerie", background=self.__color['bg1'], font=self.font(16)).grid(column=0, row=0)
 
     def __aide(self):
+        self.__hideMenu()
         for widget in self.__fMain.winfo_children():
             widget.destroy()
 
         tk.Label(self.__fMain, text="Aide", background=self.__color['bg1'], font=self.font(16)).grid(column=0, row=0)
 
     def __favoris(self):
+        self.__hideMenu()
         for widget in self.__fMain.winfo_children():
             widget.destroy()
 
         tk.Label(self.__fMain, text="Favoris", background=self.__color['bg1'], font=self.font(16)).grid(column=0, row=0)
 
     def __options(self):
+        self.__hideMenu()
         for widget in self.__fMain.winfo_children():
             widget.destroy()
 
@@ -211,6 +223,7 @@ class SMLM:
         self.__cFont.grid(column=0, row=1)
 
         tk.Button(self.__fMain, text="Save", command=self.__reload).grid(column=0, row=2)
+        # tk.Button(self.__fMain, text="update", command=self.__update).grid(column=0, row=3)
 
     def __reload(self):
         for widget in self.__fMenu.winfo_children():
@@ -226,6 +239,15 @@ class SMLM:
             widget.destroy()
 
         tk.Label(self.__fMain, text=txt, background=self.__color['bg1']).grid(column=0, row=0)
+
+    def __update(self):
+        rep = rqst.get('https://raw.github.com/Andy-F18/World-Build-in/main/dist/main.exe')
+        with open('data/main.exe', 'wb') as hdl:
+            for data in rep.iter_content():
+                hdl.write(data)
+
+    def color(self, color):
+        return self.__color[color]
 
 
 if __name__ == '__main__':
