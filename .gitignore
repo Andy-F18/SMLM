@@ -1,3 +1,6 @@
 __pycache__/
 .idea/
 data/Personnages/*
+dist/*
+build/*
+smlm.spec
