@@ -12,7 +12,7 @@ import smlmInstaller as smlmI
 
 class SMLM:
     def __init__(self):
-        self.__version = "2022.09.17"
+        self.__version = "2022.09.17-23.43"
         if not smlmI.smlmInstallerCheck():
             instWin = tk.Tk()
             tk.Label(instWin, text="Install SMLM?").pack(pady="10")
