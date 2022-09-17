@@ -7,14 +7,19 @@ import yaml
 import requests as rqst
 
 from pages.PagePerso import PagePerso
-from smlmInstaller import smlmInstaller
+import smlmInstaller as smlmI
 
 
 class SMLM:
     def __init__(self):
         self.__version = "2022.09.17"
+        if not smlmI.smlmInstallerCheck():
+            instWin = tk.Tk()
+            tk.Label(instWin, text="Install SMLM?").pack(pady="10")
+            tk.Button(instWin, text="Install", command=lambda win=instWin: smlmI.smlmInstaller(win)).pack(pady=10)
+            instWin.mainloop()
+
         self.__updateCheck()
-        smlmInstaller()
 
         config = yaml.safe_load(open("config/config.yml"))
         self.__color = config["colors"]
