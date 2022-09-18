@@ -24,21 +24,26 @@ def smlmInstaller(instWin: tk.Tk):
 
     g = gh.Github()
     repo = g.get_repo("Andy-F18/SMLM")
-    content = repo.get_contents("")
+    content = []
+    for d in dirList:
+        os.mkdir(d)
+        lFiles.set(d)
+        content.extend(repo.get_contents(d))
+        instWin.update()
+
     while content:
         file = content.pop(0)
         lFiles.set(file.path)
-        for d in dirList:
-            if file.path.find(d) != -1:
-                print(file.path)
-                if file.type == "dir":
-                    content.extend(repo.get_contents(file.path))
-                    os.mkdir(file.path)
-                else:
-                    rep = rqst.get('https://raw.github.com/Andy-F18/SMLM/main/'+file.path)
-                    print("bruh")
-                    with open(file.path, 'wb') as hdl:
-                        for data in rep.iter_content():
-                            hdl.write(data)
+        instWin.update()
+        print(file.path)
+        if file.type == "dir":
+            content.extend(repo.get_contents(file.path))
+            os.mkdir(file.path)
+        else:
+            rep = rqst.get('https://raw.github.com/Andy-F18/SMLM/main/'+file.path)
+            print("bruh")
+            with open(file.path, 'wb') as hdl:
+                for data in rep.iter_content():
+                    hdl.write(data)
 
     instWin.destroy()

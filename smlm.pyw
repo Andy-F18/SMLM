@@ -12,7 +12,7 @@ import smlmInstaller as smlmI
 
 class SMLM:
     def __init__(self):
-        self.__version = "2022.09.17-23.43"
+        self.__version = "2022.09.18-10.56"
         if not smlmI.smlmInstallerCheck():
             instWin = tk.Tk()
             tk.Label(instWin, text="Install SMLM?").pack(pady="10")
@@ -232,7 +232,6 @@ class SMLM:
         self.__cFont.grid(column=0, row=1)
 
         tk.Button(self.__fMain, text="Save", command=self.__reload).grid(column=0, row=2)
-        # tk.Button(self.__fMain, text="update", command=self.__updateCheck).grid(column=0, row=3)
 
     def __reload(self):
         for widget in self.__fMenu.winfo_children():
